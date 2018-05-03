@@ -2,6 +2,7 @@
 using PhotoStationFrame.Api.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace PhotoStationFrame.Api
             this.password = apiSettings.Password;
         }
 
-        public async Task ListAlbums()
+        public async Task<ListAlbumsResponse> ListAlbumsAsync()
         {
             if(this.sessionId == null)
             {
@@ -48,9 +49,45 @@ namespace PhotoStationFrame.Api
                     new KeyValuePair<string, string>("version", "1")
                 });
 
-            var response = await httpClient.PostAsync($"photo/webapi/album.php?SynoToken={sessionId}", content);
-            var responseString = await response.Content.ReadAsStringAsync();
-            var loginResponse = JsonConvert.DeserializeObject<ListAlbumsResponse>(responseString);
+            var response = await httpClient.PostAsync($"photo/webapi/album.php?SynoToken={sessionId}", content).ConfigureAwait(false);
+            var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var listAlbumsResponse = JsonConvert.DeserializeObject<ListAlbumsResponse>(responseString);
+            return listAlbumsResponse;
+        }
+
+        public async Task ListItemsAsync(string parentId)
+        {
+            if (this.sessionId == null)
+            {
+                throw new Exception("Please login first.");
+            }
+
+            var content = new List<KeyValuePair<string,string>>
+              {
+                    new KeyValuePair<string, string>("additional", "album_permission,photo_exif,video_codec,video_quality,thumb_size,file_location"),
+                    new KeyValuePair<string, string>("api", "SYNO.PhotoStation.Album"),
+                    new KeyValuePair<string, string>("limit", "100"),
+                    new KeyValuePair<string, string>("method", "list"),
+                    new KeyValuePair<string, string>("offset", "0"),
+                    new KeyValuePair<string, string>("recursive", "false"),
+                    new KeyValuePair<string, string>("sort_by", "preference"),
+                    new KeyValuePair<string, string>("sort_direction", "asc"),
+                    new KeyValuePair<string, string>("type", "album,photo,video"),
+                    new KeyValuePair<string, string>("version", "1")
+                };
+
+            if(parentId != null)
+            {
+                content.Add(new KeyValuePair<string, string>("id", "album_53616d73756e67416c6578"));
+
+            }
+
+            var requestContent = new FormUrlEncodedContent(content);
+
+
+            var response = await httpClient.PostAsync($"photo/webapi/album.php?SynoToken={sessionId}", requestContent).ConfigureAwait(false);
+            var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var listItemsResponse = JsonConvert.DeserializeObject<ListAlbumsResponse>(responseString);
 
         }
 
@@ -69,9 +106,9 @@ namespace PhotoStationFrame.Api
                     new KeyValuePair<string, string>("version", "1")
                 });
 
-                var response = await httpClient.PostAsync("photo/webapi/auth.php", content);
+                var response = await httpClient.PostAsync("photo/webapi/auth.php", content).ConfigureAwait(false);
 
-                var responseString = await response.Content.ReadAsStringAsync();
+                var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseString);
                 if(loginResponse?.success != true || loginResponse?.data?.sid == null)

@@ -1,5 +1,7 @@
 ﻿using PhotoStationFrame.Api;
+using PhotoStationFrame.Api.Models;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PhotoStationFrame.Consol
@@ -12,7 +14,9 @@ namespace PhotoStationFrame.Consol
             var photoClient = new PhotoStationClient();
             photoClient.Initialize(new DemoApiSettings());
             await photoClient.LoginAsync();
-            await photoClient.ListAlbums();
+            var albums = await photoClient.ListAlbumsAsync();
+            var album = albums.data.items.First(x => x.info.name == "SamsungAlex");
+            await photoClient.ListItemsAsync(album.id);
             Console.ReadKey();
         }
     }
