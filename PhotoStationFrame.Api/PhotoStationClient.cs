@@ -56,7 +56,33 @@ namespace PhotoStationFrame.Api
             return listAlbumsResponse;
         }
 
-        public async Task<PhotoItem[]> ListItemsAsync(string parentId)
+        public async Task<SmartAlbumsResponse> ListSmartAlbumsAsync()
+        {
+            if (this.sessionId == null)
+            {
+                throw new Exception("Please login first.");
+            }
+
+
+            var content = new FormUrlEncodedContent(new[]
+              {
+                    //new KeyValuePair<string, string>("additional", "thumb_size"),
+                    new KeyValuePair<string, string>("api", "SYNO.PhotoStation.SmartAlbum"),
+                    new KeyValuePair<string, string>("limit", "50"),
+                    new KeyValuePair<string, string>("method", "list"),
+                    new KeyValuePair<string, string>("offset", "0"),
+                    new KeyValuePair<string, string>("sort_by", "title"),
+                    new KeyValuePair<string, string>("sort_direction", "asc"),
+                    new KeyValuePair<string, string>("version", "1")
+                });
+
+            var response = await httpClient.PostAsync($"photo/webapi/smart_album.php?SynoToken={sessionId}", content).ConfigureAwait(false);
+            var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var listAlbumsResponse = JsonConvert.DeserializeObject<SmartAlbumsResponse>(responseString);
+            return listAlbumsResponse;
+        }
+
+        public async Task<PhotoItem[]> ListPhotosAsync(string parentId,int offset = 0,int limit = 100)
         {
             if (this.sessionId == null)
             {
@@ -67,11 +93,11 @@ namespace PhotoStationFrame.Api
               {
                     new KeyValuePair<string, string>("additional", "album_permission,photo_exif,video_codec,video_quality,thumb_size,file_location"),
                     new KeyValuePair<string, string>("api", "SYNO.PhotoStation.Album"),
-                    new KeyValuePair<string, string>("limit", "100"),
+                    new KeyValuePair<string, string>("limit", limit.ToString()),
                     new KeyValuePair<string, string>("method", "list"),
-                    new KeyValuePair<string, string>("offset", "0"),
+                    new KeyValuePair<string, string>("offset", offset.ToString()),
                     new KeyValuePair<string, string>("recursive", "false"),
-                    new KeyValuePair<string, string>("sort_by", "preference"),
+                    new KeyValuePair<string, string>("sort_by", "filename"),
                     new KeyValuePair<string, string>("sort_direction", "asc"),
                     //new KeyValuePair<string, string>("type", "album,photo,video"),
                     new KeyValuePair<string, string>("type", "photo"),
@@ -80,8 +106,14 @@ namespace PhotoStationFrame.Api
 
             if(parentId != null)
             {
-                content.Add(new KeyValuePair<string, string>("id", "album_53616d73756e67416c6578"));
-
+                //if (!parentId.StartsWith("smart"))
+                //{
+                    content.Add(new KeyValuePair<string, string>("id", parentId));
+                //}
+                //else
+                //{
+                //    content.Add(new KeyValuePair<string, string>("filter_smart", parentId));
+                //}
             }
 
             var requestContent = new FormUrlEncodedContent(content);
