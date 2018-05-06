@@ -1,0 +1,26 @@
+﻿<Page
+    x:Class="PhotoStationFrame.Uwp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PhotoStationFrame.Uwp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:PhotoStationFrame.Uwp.Converters"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <converters:ImageModelToBitmapImageConverter x:Key="ImageConverter" />
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid>
+        <FlipView x:Name="MyFlipView" ItemsSource="{Binding ThumbnailUrls}" Loaded="FlipView_Loaded" Unloaded="MyFlipView_Unloaded">
+            <FlipView.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="{Binding Converter={StaticResource ImageConverter}}" Stretch="Uniform" ImageFailed="Image_ImageFailed" >
+                    </Image>
+                </DataTemplate>
+            </FlipView.ItemTemplate>
+        </FlipView>
+    </Grid>
+</Page>

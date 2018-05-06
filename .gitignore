@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 PhotoStationFrame.Console/DemoApiSettings.cs
+/PhotoStationFrame.Uwp/Settings/PhotoApiSettings.cs
