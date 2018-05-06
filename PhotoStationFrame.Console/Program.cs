@@ -16,7 +16,9 @@ namespace PhotoStationFrame.Consol
             await photoClient.LoginAsync();
             var albums = await photoClient.ListAlbumsAsync();
             var album = albums.data.items.First(x => x.info.name == "SamsungAlex");
-            await photoClient.ListItemsAsync(album.id);
+            var photos = await photoClient.ListItemsAsync(album.id);
+            var url = photoClient.GetThumbnailUrl(photos[0]);
+            await photoClient.GetThumbnailData(url);
             Console.ReadKey();
         }
     }
