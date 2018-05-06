@@ -5,29 +5,20 @@ using System.Text;
 namespace PhotoStationFrame.Api.Models
 {
 
-    public class ListAlbumsResponse
+    public class ListAlbumsResponse : PhotoStationBaseResponse<ListData<AlbumItem>>
     {
-        public bool success { get; set; }
-        public ListAlbumsData data { get; set; }
     }
 
-    public class ListAlbumsData
+    public class AlbumItem
     {
-        public int total { get; set; }
-        public int offset { get; set; }
-        public Item[] items { get; set; }
-    }
-
-    public class Item
-    {
-        public Info info { get; set; }
+        public AlbumInfo info { get; set; }
         public string id { get; set; }
         public string type { get; set; }
         public object additional { get; set; }
         public string thumbnail_status { get; set; }
     }
 
-    public class Info
+    public class AlbumInfo
     {
         public string sharepath { get; set; }
         public string name { get; set; }

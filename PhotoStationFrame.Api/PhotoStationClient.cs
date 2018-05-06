@@ -2,6 +2,7 @@
 using PhotoStationFrame.Api.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -55,7 +56,7 @@ namespace PhotoStationFrame.Api
             return listAlbumsResponse;
         }
 
-        public async Task ListItemsAsync(string parentId)
+        public async Task<PhotoItem[]> ListItemsAsync(string parentId)
         {
             if (this.sessionId == null)
             {
@@ -72,7 +73,8 @@ namespace PhotoStationFrame.Api
                     new KeyValuePair<string, string>("recursive", "false"),
                     new KeyValuePair<string, string>("sort_by", "preference"),
                     new KeyValuePair<string, string>("sort_direction", "asc"),
-                    new KeyValuePair<string, string>("type", "album,photo,video"),
+                    //new KeyValuePair<string, string>("type", "album,photo,video"),
+                    new KeyValuePair<string, string>("type", "photo"),
                     new KeyValuePair<string, string>("version", "1")
                 };
 
@@ -87,8 +89,24 @@ namespace PhotoStationFrame.Api
 
             var response = await httpClient.PostAsync($"photo/webapi/album.php?SynoToken={sessionId}", requestContent).ConfigureAwait(false);
             var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var listItemsResponse = JsonConvert.DeserializeObject<ListAlbumsResponse>(responseString);
+            var listItemsResponse = JsonConvert.DeserializeObject<ListItemResponse>(responseString);
+            return listItemsResponse.data.items;
+        }
 
+        public string GetThumbnailUrl(PhotoItem item)
+        {
+            return $"{this.url}/photo/webapi/thumb.php?api=SYNO.PhotoStation.Thumb&method=get&version=1&size=small&id={item.id}&rotate_version=1&thumb_sig={item.additional.thumb_size.sig}&mtime={item.additional.thumb_size.small.mtime}&SynoToken={this.sessionId}";
+        }
+
+        public string GetBiglUrl(PhotoItem item)
+        {
+            return $"{this.url}/photo/webapi/thumb.php?api=SYNO.PhotoStation.Thumb&method=get&version=1&size=large&id={item.id}&rotate_version=1&thumb_sig={item.additional.thumb_size.sig}&mtime={item.additional.thumb_size.large.mtime}&SynoToken={this.sessionId}";
+        }
+
+        public async Task<Stream> GetThumbnailData(string thumbUrl)
+        {
+            var result = await httpClient.GetStreamAsync(thumbUrl);
+            return result;
         }
 
         public async Task<bool> LoginAsync()
@@ -102,6 +120,7 @@ namespace PhotoStationFrame.Api
                     new KeyValuePair<string, string>("enable_syno_token", "true"),
                     new KeyValuePair<string, string>("method", "photo_login"),
                     new KeyValuePair<string, string>("password", this.password),
+                    new KeyValuePair<string, string>("remember_me", "on"),
                     new KeyValuePair<string, string>("username", this.username),
                     new KeyValuePair<string, string>("version", "1")
                 });

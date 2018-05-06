@@ -1,9 +1,7 @@
 ﻿namespace PhotoStationFrame.Api.Models
 {
-    public class LoginResponse
+    public class LoginResponse: PhotoStationBaseResponse<LoginData>
     {
-        public bool success { get; set; }
-        public LoginData data { get; set; }
     }
 
     public class LoginData
