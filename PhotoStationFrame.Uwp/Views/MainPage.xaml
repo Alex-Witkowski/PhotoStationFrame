@@ -13,11 +13,11 @@
             <converters:ImageModelToBitmapImageConverter x:Key="ImageConverter" />
         </ResourceDictionary>
     </Page.Resources>
-    <Grid>
+    <Grid x:Name="MyGrid">
         <FlipView x:Name="MyFlipView" ItemsSource="{Binding ThumbnailUrls}" Loaded="FlipView_Loaded" Unloaded="MyFlipView_Unloaded">
             <FlipView.ItemTemplate>
                 <DataTemplate>
-                    <Image Source="{Binding Converter={StaticResource ImageConverter}}" Stretch="Uniform" ImageFailed="Image_ImageFailed" >
+                    <Image  Source="{Binding Converter={StaticResource ImageConverter}}" Stretch="Uniform" ImageFailed="Image_ImageFailed" >
                     </Image>
                 </DataTemplate>
             </FlipView.ItemTemplate>

@@ -26,6 +26,7 @@ namespace PhotoStationFrame.Uwp
     public sealed partial class MainPage : Page
     {
         private DispatcherTimer timer;
+        private bool rotate = true;
 
         public MainPage()
         {
@@ -33,6 +34,12 @@ namespace PhotoStationFrame.Uwp
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(10);
             timer.Tick += HandleTimerTick;
+            Loaded += HanldeLoaded;
+        }
+
+        private void HanldeLoaded(object sender, RoutedEventArgs e)
+        {
+            CheckRotation();
         }
 
         private void HandleTimerTick(object sender, object e)
@@ -55,6 +62,31 @@ namespace PhotoStationFrame.Uwp
             var vm = new MainViewModel();
             this.DataContext = vm;
             await vm.LoadData();
+        }
+
+        private void CheckRotation()
+        {
+            if(!rotate)
+            {
+                return;
+            }
+
+            MyGrid.Width = this.ActualHeight;
+            MyGrid.Height = this.ActualWidth;
+            MyFlipView.Width = this.ActualHeight;
+            MyFlipView.Height = this.ActualWidth;
+            MyGrid.RenderTransformOrigin = new Point(0.5, 0.5);
+            var transformGroup = new TransformGroup();
+           
+            var translateTransform = new TranslateTransform();
+            translateTransform.X = (this.ActualWidth - this.ActualHeight) / 2 * -1;
+            Debug.WriteLine(translateTransform.Y);
+            translateTransform.Y = 0;
+            transformGroup.Children.Add(translateTransform);
+            var rotateTransfor = new RotateTransform();
+            rotateTransfor.Angle = 90;
+            transformGroup.Children.Add(rotateTransfor);
+            MyGrid.RenderTransform = transformGroup;
         }
 
         private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)

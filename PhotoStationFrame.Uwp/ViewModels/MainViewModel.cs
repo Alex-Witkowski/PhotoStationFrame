@@ -24,7 +24,7 @@ namespace PhotoStationFrame.Uwp.ViewModels
             await photoClient.LoginAsync();
             var albums = await photoClient.ListAlbumsAsync();
             var album = albums.data.items.First(x => x.info.name == "SamsungAlex");
-            var photos = await photoClient.ListItemsAsync(album.id);
+            var photos = await photoClient.ListPhotosAsync(album.id);
             var images = photos.Select(p => new ImageModel(photoClient.GetBiglUrl(p),photoClient));
             ThumbnailUrls = new ObservableCollection<ImageModel>(images);
 
