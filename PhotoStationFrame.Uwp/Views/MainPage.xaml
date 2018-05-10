@@ -7,15 +7,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:PhotoStationFrame.Uwp.Converters"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="Black"
     DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Page.Resources>
         <ResourceDictionary>
             <converters:ImageModelToBitmapImageConverter x:Key="ImageConverter" />
         </ResourceDictionary>
     </Page.Resources>
-    <Grid x:Name="MyGrid">
-        <FlipView x:Name="MyFlipView" ItemsSource="{Binding ThumbnailUrls}" Loaded="FlipView_Loaded" Unloaded="MyFlipView_Unloaded">
+    <Grid x:Name="MyGrid" >
+        <FlipView x:Name="MyFlipView" Background="#00000000" ItemsSource="{Binding ThumbnailUrls}" Loaded="FlipView_Loaded" Unloaded="MyFlipView_Unloaded">
             <FlipView.ItemTemplate>
                 <DataTemplate>
                     <Image  Source="{Binding Converter={StaticResource ImageConverter}}" Stretch="Uniform" ImageFailed="Image_ImageFailed" >
