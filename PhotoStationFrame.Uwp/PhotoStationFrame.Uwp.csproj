@@ -96,6 +96,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\ImageModelToBitmapImageConverter.cs" />
+    <Compile Include="Converters\ImageModelToStretchConverter.cs" />
     <Compile Include="Models\AlbumTypes.cs" />
     <Compile Include="Settings\PhotoApiSettings.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

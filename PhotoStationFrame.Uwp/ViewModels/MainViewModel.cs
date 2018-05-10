@@ -44,7 +44,7 @@ namespace PhotoStationFrame.Uwp.ViewModels
             }
 
             var photos = await photoClient.ListSmartAlbumItemsAsync(album.id);
-            var images = photos?.Select(p => new ImageModel(photoClient.GetBiglUrl(p),photoClient)).ToArray();
+            var images = photos?.Select(p => new ImageModel(photoClient.GetBiglUrl(p), p, photoClient)).ToArray();
             if (images?.Length > 0)
             {
                 ThumbnailUrls = new ObservableCollection<ImageModel>(images);

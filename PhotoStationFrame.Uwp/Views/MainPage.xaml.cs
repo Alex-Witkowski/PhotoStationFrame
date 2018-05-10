@@ -18,16 +18,41 @@ namespace PhotoStationFrame.Uwp
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private DispatcherTimer timer;
+        private DispatcherTimer flipTimer;
+        private DispatcherTimer reloadTimer;
         private bool rotate = false;
+        private bool imagesShown;
+        private Random random;
 
         public MainPage()
         {
             this.InitializeComponent();
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(10);
-            timer.Tick += HandleTimerTick;
+
+            // Initialize timer thats changes image every x seconds
+            flipTimer = new DispatcherTimer();
+            flipTimer.Interval = TimeSpan.FromSeconds(10);
+            flipTimer.Tick += HandleFlipTimerTick;
+
+            // Initialize timer that relaods the images after y minutes
+            reloadTimer = new DispatcherTimer();
+            reloadTimer.Interval = TimeSpan.FromMinutes(10);
+            reloadTimer.Tick += HandleReloadTimerTick;
+            random = new Random(DateTime.Now.Millisecond);
+
             Loaded += HanldeLoaded;
+        }
+
+        private void HandleReloadTimerTick(object sender, object e)
+        {
+            // ToDo: Handle Relaod better with loading images and check if something changed
+            if(!imagesShown)
+            {
+                return;
+            }
+
+            var viewModel = this.DataContext as MainViewModel;
+            viewModel?.LoadData();
+            imagesShown = false;
         }
 
         private void HanldeLoaded(object sender, RoutedEventArgs e)
@@ -35,20 +60,21 @@ namespace PhotoStationFrame.Uwp
             CheckRotation();
         }
 
-        private void HandleTimerTick(object sender, object e)
+        private void HandleFlipTimerTick(object sender, object e)
         {
             if (!(MyFlipView.Items?.Count > 0))
             {
                 return;
             }
 
-            if (MyFlipView.SelectedIndex < MyFlipView.Items?.Count - 1)
+            if (MyFlipView.SelectedIndex < MyFlipView.Items.Count - 1)
             {
                 MyFlipView.SelectedIndex++;
             }
             else
             {
                 MyFlipView.SelectedIndex = 0;
+                imagesShown = true;
             }
         }
 
@@ -112,12 +138,14 @@ namespace PhotoStationFrame.Uwp
 
         private void FlipView_Loaded(object sender, RoutedEventArgs e)
         {
-            timer.Start();
+            flipTimer.Start();
+            reloadTimer.Start();
         }
 
         private void MyFlipView_Unloaded(object sender, RoutedEventArgs e)
         {
-            timer.Stop();
+            flipTimer.Stop();
+            reloadTimer.Stop();
         }
     }
 }
