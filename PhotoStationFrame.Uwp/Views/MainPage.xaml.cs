@@ -1,18 +1,11 @@
 ﻿using PhotoStationFrame.Uwp.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.ViewManagement;
+using Windows.System;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
@@ -26,7 +19,7 @@ namespace PhotoStationFrame.Uwp
     public sealed partial class MainPage : Page
     {
         private DispatcherTimer timer;
-        private bool rotate = true;
+        private bool rotate = false;
 
         public MainPage()
         {
@@ -44,7 +37,12 @@ namespace PhotoStationFrame.Uwp
 
         private void HandleTimerTick(object sender, object e)
         {
-            if(MyFlipView.SelectedIndex <= MyFlipView.Items?.Count)
+            if (!(MyFlipView.Items?.Count > 0))
+            {
+                return;
+            }
+
+            if (MyFlipView.SelectedIndex < MyFlipView.Items?.Count - 1)
             {
                 MyFlipView.SelectedIndex++;
             }
@@ -57,16 +55,34 @@ namespace PhotoStationFrame.Uwp
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            var view = ApplicationView.GetForCurrentView();
-            view.TryEnterFullScreenMode();
-            var vm = new MainViewModel();
-            this.DataContext = vm;
-            await vm.LoadData();
+            // Add handler for settinge keyboard shortcut
+            Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
+
+            var vm = this.DataContext as MainViewModel;
+            await vm?.LoadData();
+        }
+
+        private void CoreWindow_KeyDown(CoreWindow sender, KeyEventArgs args)
+        {
+            if (sender.GetKeyState(VirtualKey.Control) == CoreVirtualKeyStates.Down &&
+                args.VirtualKey == VirtualKey.S)
+            {
+                var vm = this.DataContext as MainViewModel;
+                vm?.GoToSettingsCommand?.Execute(null);
+            }
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            // Remove handler for settinge keyboard shortcut
+            Window.Current.CoreWindow.KeyDown -= CoreWindow_KeyDown;
         }
 
         private void CheckRotation()
         {
-            if(!rotate)
+            if (!rotate)
             {
                 return;
             }
@@ -77,7 +93,7 @@ namespace PhotoStationFrame.Uwp
             MyFlipView.Height = this.ActualWidth;
             MyGrid.RenderTransformOrigin = new Point(0.5, 0.5);
             var transformGroup = new TransformGroup();
-           
+
             var translateTransform = new TranslateTransform();
             translateTransform.X = (this.ActualWidth - this.ActualHeight) / 2 * -1;
             Debug.WriteLine(translateTransform.Y);

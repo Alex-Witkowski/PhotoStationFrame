@@ -8,6 +8,7 @@
     xmlns:converters="using:PhotoStationFrame.Uwp.Converters"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Page.Resources>
         <ResourceDictionary>
             <converters:ImageModelToBitmapImageConverter x:Key="ImageConverter" />
