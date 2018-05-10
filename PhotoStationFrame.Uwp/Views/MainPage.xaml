@@ -16,7 +16,7 @@
         </ResourceDictionary>
     </Page.Resources>
     <Grid x:Name="MyGrid" >
-        <FlipView x:Name="MyFlipView" Background="#00000000" ItemsSource="{Binding ThumbnailUrls}" Loaded="FlipView_Loaded" Unloaded="MyFlipView_Unloaded">
+        <FlipView x:Name="MyFlipView" Background="#00000000" ItemsSource="{Binding Images}" Loaded="FlipView_Loaded" Unloaded="MyFlipView_Unloaded">
             <FlipView.ItemTemplate>
                 <DataTemplate>
                     <Image  Source="{Binding Converter={StaticResource ImageConverter}}" Stretch="{Binding Converter={StaticResource StretchConverter}}" ImageFailed="Image_ImageFailed" >

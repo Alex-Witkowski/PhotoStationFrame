@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using PhotoStationFrame.Api;
+using PhotoStationFrame.Uwp.Extensions;
 using PhotoStationFrame.Uwp.Settings;
 using PhotoStationFrame.Uwp.ViewObjects;
 using System;
@@ -18,6 +19,8 @@ namespace PhotoStationFrame.Uwp.ViewModels
         private PhotoStationClient photoClient;
         private readonly INavigationService navigationService;
         private ObservableCollection<ImageModel> _thumbnailUrls;
+
+        private const bool randomOrder = true;
 
         public MainViewModel(PhotoStationClient photoStationClient, INavigationService navigationService)
         {
@@ -45,14 +48,16 @@ namespace PhotoStationFrame.Uwp.ViewModels
 
             var photos = await photoClient.ListSmartAlbumItemsAsync(album.id);
             var images = photos?.Select(p => new ImageModel(photoClient.GetBiglUrl(p), p, photoClient)).ToArray();
-            if (images?.Length > 0)
+            if(randomOrder)
             {
-                ThumbnailUrls = new ObservableCollection<ImageModel>(images);
+                images.Shuffle();
             }
+
+            Images = new ObservableCollection<ImageModel>(images);
         }
 
         public ICommand GoToSettingsCommand { get; set; }
 
-        public ObservableCollection<ImageModel> ThumbnailUrls { get => _thumbnailUrls; set => Set(ref _thumbnailUrls, value); }
+        public ObservableCollection<ImageModel> Images { get => _thumbnailUrls; set => Set(ref _thumbnailUrls, value); }
     }
 }

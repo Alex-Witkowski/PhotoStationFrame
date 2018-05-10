@@ -22,7 +22,6 @@ namespace PhotoStationFrame.Uwp
         private DispatcherTimer reloadTimer;
         private bool rotate = false;
         private bool imagesShown;
-        private Random random;
 
         public MainPage()
         {
@@ -37,7 +36,6 @@ namespace PhotoStationFrame.Uwp
             reloadTimer = new DispatcherTimer();
             reloadTimer.Interval = TimeSpan.FromMinutes(10);
             reloadTimer.Tick += HandleReloadTimerTick;
-            random = new Random(DateTime.Now.Millisecond);
 
             Loaded += HanldeLoaded;
         }
