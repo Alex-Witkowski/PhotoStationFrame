@@ -95,11 +95,15 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\ImageModelToBitmapImageConverter.cs" />
     <Compile Include="Converters\ImageModelToStretchConverter.cs" />
     <Compile Include="Extensions\IListExtensions.cs" />
     <Compile Include="Models\AlbumTypes.cs" />
+    <Compile Include="Settings\ISettingsHelper.cs" />
     <Compile Include="Settings\PhotoApiSettings.cs" />
+    <Compile Include="Settings\PhotoFrameSettings.cs" />
+    <Compile Include="Settings\SettingsHelper.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
@@ -148,6 +152,9 @@
     </PackageReference>
     <PackageReference Include="MvvmLight">
       <Version>5.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Essentials">
+      <Version>0.6.0-preview</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

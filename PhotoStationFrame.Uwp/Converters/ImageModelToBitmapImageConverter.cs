@@ -1,6 +1,7 @@
 ﻿using PhotoStationFrame.Uwp.ViewObjects;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,27 +17,37 @@ namespace PhotoStationFrame.Uwp.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            
+
             var imageModel = value as ImageModel;
-            if(imageModel == null)
+            if (imageModel == null)
             {
                 return DependencyProperty.UnsetValue;
             }
             var bitmap = new BitmapImage();
 
-            Task.Run(async () => { 
-                using (var stream = await imageModel.Client.GetThumbnailData(imageModel.Url))
-                using (var memStream = new MemoryStream())
+            Task.Run(async () =>
+            {
+                try
                 {
-                    await stream.CopyToAsync(memStream);
-                    memStream.Position = 0;
-                    await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                    () =>
+
+
+                    using (var stream = await imageModel.Client.GetThumbnailData(imageModel.Url))
+                    using (var memStream = new MemoryStream())
                     {
+                        await stream.CopyToAsync(memStream);
+                        memStream.Position = 0;
+                        await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                        () =>
+                        {
                         // Your UI update code goes here!
                         bitmap.SetSource(memStream.AsRandomAccessStream());
-                        
-                    });
+
+                        });
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
                 }
             });
 

@@ -8,10 +8,10 @@
     {
         public int total { get; set; }
         public int offset { get; set; }
-        public Smart_Albums[] smart_albums { get; set; }
+        public Smart_Album[] smart_albums { get; set; }
     }
 
-    public class Smart_Albums
+    public class Smart_Album
     {
         public string id { get; set; }
         public string type { get; set; }

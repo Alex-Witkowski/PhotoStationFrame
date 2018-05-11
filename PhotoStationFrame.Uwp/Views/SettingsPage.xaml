@@ -5,9 +5,15 @@
     xmlns:local="using:PhotoStationFrame.Uwp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:PhotoStationFrame.Uwp.Converters"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding Settings,Source={StaticResource Locator}}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </ResourceDictionary>
+    </Page.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -17,10 +23,16 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="6"/>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -28,23 +40,34 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Text="Address"/>
-        <TextBox Grid.Column="1" PlaceholderText="192.168.1.12" Text="{x:Bind ViewModel.Address, Mode=TwoWay}"/>
-        <TextBlock Grid.Row="1" Text="Username"/>
-        <TextBox Grid.Row="1" Grid.Column="1" PlaceholderText="Username" Text="{x:Bind ViewModel.UserName, Mode=TwoWay}"/>
-        <TextBlock Grid.Row="2" Text="Password"/>
-        <PasswordBox Grid.Row="2" Grid.Column="1" PlaceholderText="Password" Password="{x:Bind ViewModel.Password, Mode=TwoWay}"/>
-        <TextBlock Grid.Row="3" Text="Login"/>
-        <Button Grid.Row="3" Grid.Column="1" Content="Login" Command="{x:Bind ViewModel.CheckCredetialsCommand}"/>
-        <TextBlock Grid.Row="4" Text="Use album"/>
-        <RadioButton Grid.Row="4" Grid.Column="1" Content="Use album" GroupName="AlbumType" IsChecked="True"/>
-        <TextBlock Grid.Row="5" Text="Albums"/>
-        <ComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{x:Bind ViewModel.Albums, Mode=OneWay}" DisplayMemberPath="info.name"/>
-        <TextBlock Grid.Row="6" Text="Use smart album"/>
-        <RadioButton Grid.Row="6" Grid.Column="1" Content="Use album" GroupName="AlbumType"/>
-        <TextBlock Grid.Row="7" Text="Smart albums"/>
-        <ComboBox Grid.Row="7" Grid.Column="1" ItemsSource="{x:Bind ViewModel.SmartAlbums, Mode=OneWay}" DisplayMemberPath="name"/>
-        <Button Grid.Row="8" Content="Cancel" Command="{x:Bind ViewModel.CancelCommand}"/>
-        <Button Grid.Row="8" Grid.Column="1" Content="Save" Command="{x:Bind ViewModel.SaveSettingsCommand}"/>
+        <SymbolIcon HorizontalAlignment="Right" Symbol="Setting" Margin="12" Grid.Row="1"/>
+        <TextBlock Grid.Column="1" Text="Settings" Style="{ThemeResource SubtitleTextBlockStyle}" VerticalAlignment="Center" Grid.Row="1" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="First enter your Synologys name or IP address and your credetials. If login is successfull you can continue to select what the PhotStationFrame should show." TextWrapping="WrapWholeWords" />
+        <TextBlock Grid.Column="1" Text="Address" Grid.Row="3"/>
+        <TextBox Grid.Column="2" PlaceholderText="192.168.1.12 or diskstation" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" Text="{x:Bind ViewModel.Address, Mode=TwoWay}" Grid.Row="3"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="Username"/>
+        <TextBox Grid.Row="4" Grid.Column="2" PlaceholderText="Username" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False"  Text="{x:Bind ViewModel.UserName, Mode=TwoWay}"/>
+        <TextBlock Grid.Row="5" Grid.Column="1" Text="Password"/>
+        <PasswordBox Grid.Row="5" Grid.Column="2" PlaceholderText="Password" Password="{x:Bind ViewModel.Password, Mode=TwoWay}"/>
+        <TextBlock Grid.Row="6" Grid.Column="1" Text="Use HTTPS"/>
+        <CheckBox Grid.Row="6" Grid.Column="2"  IsChecked="{x:Bind ViewModel.UseHttps, Mode=TwoWay}"/>
+        <ProgressBar Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" IsIndeterminate="True" Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay,Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <TextBlock Grid.Row="8" Grid.Column="1" Text="Login"/>
+        <Button Grid.Row="8" Grid.Column="2" Content="Login" Command="{x:Bind ViewModel.CheckCredetialsCommand}"/>
+        <TextBlock Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Text="Please select the3 album you wante the PhoteStatinFrame to show. We recommend to use a smart album. That gives you rich capabilities to select and filter the images shown by PhotoStatinFrame. For example you can filter by start rating over all your albums." TextWrapping="WrapWholeWords" Margin="0,12,0,0"/>
+        <!--Smart albums-->
+        <TextBlock Grid.Row="10" Grid.Column="1" Text="Use smart album"/>
+        <RadioButton Grid.Row="10" Grid.Column="2" Content="Use smart album" IsChecked="{x:Bind ViewModel.UseSmartAlbum,Mode=TwoWay}" GroupName="AlbumType" IsEnabled="{x:Bind ViewModel.LoginSuccessfull, Mode=OneWay}"/>
+        <TextBlock Grid.Row="11" Grid.Column="1" Text="Smart albums"/>
+        <ComboBox Grid.Row="11" Grid.Column="2" ItemsSource="{x:Bind ViewModel.SmartAlbums, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedSmartAlbum, Mode=TwoWay}" IsEnabled="{x:Bind ViewModel.LoginSuccessfull, Mode=OneWay}" HorizontalAlignment="Stretch" DisplayMemberPath="name"/>
+        <!-- Albums-->
+        <TextBlock Grid.Row="12" Grid.Column="1" Text="Use album"/>
+        <RadioButton Grid.Row="12" Grid.Column="2" Content="Use album" GroupName="AlbumType" IsEnabled="{x:Bind ViewModel.LoginSuccessfull, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="13" Grid.Column="1" Text="Albums"/>
+        <ComboBox Grid.Row="13" Grid.Column="2" ItemsSource="{x:Bind ViewModel.Albums, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedAlbum, Mode=TwoWay}" IsEnabled="{x:Bind ViewModel.LoginSuccessfull, Mode=OneWay}" HorizontalAlignment="Stretch" DisplayMemberPath="info.name"/>
+        
+        <Button Grid.Row="14" Grid.Column="1" Content="Cancel" Command="{x:Bind ViewModel.CancelCommand}" Margin="0,12"/>
+        <Button Grid.Row="14" Grid.Column="2" Content="Save" Command="{x:Bind ViewModel.SaveSettingsCommand}" Margin="0,12"/>
+        <TextBlock Grid.Row="15" Grid.Column="1" Grid.ColumnSpan="2" Foreground="Red" Text="{x:Bind ViewModel.Message,Mode=OneWay}" />
     </Grid>
 </Page>

@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using PhotoStationFrame.Api;
+using PhotoStationFrame.Uwp.Settings;
 using PhotoStationFrame.Uwp.Views;
 using System;
 
@@ -31,6 +32,7 @@ namespace PhotoStationFrame.Uwp.ViewModels
         {
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
+            SimpleIoc.Default.Register<ISettingsHelper, SettingsHelper>();
             SimpleIoc.Default.Register<PhotoStationClient>();
             SimpleIoc.Default.Register<INavigationService,NavigationService>();
         }

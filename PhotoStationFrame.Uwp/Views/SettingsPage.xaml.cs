@@ -28,6 +28,12 @@ namespace PhotoStationFrame.Uwp.Views
             this.InitializeComponent();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            ViewModel?.Initialize();
+        }
+
         private SettingsViewModel ViewModel => DataContext as SettingsViewModel;
     }
 }

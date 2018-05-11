@@ -81,7 +81,7 @@ namespace PhotoStationFrame.Api
             return listAlbumsResponse;
         }
 
-        public async Task<PhotoItem[]> ListSmartAlbumItemsAsync(string smartAlbumId, int offset = 0, int limit = 100)
+        public async Task<ListItemResponse> ListSmartAlbumItemsAsync(string smartAlbumId, int offset = 0, int limit = 100)
         {
             if (this.sessionId == null)
             {
@@ -90,7 +90,8 @@ namespace PhotoStationFrame.Api
 
             var content = new List<KeyValuePair<string, string>>
               {
-                    new KeyValuePair<string, string>("additional", "photo_exif,video_codec,video_quality,thumb_size"),
+                    //new KeyValuePair<string, string>("additional", "photo_exif,video_codec,video_quality,thumb_size"),
+                    new KeyValuePair<string, string>("additional", "photo_exif,thumb_size"),
                     new KeyValuePair<string, string>("api", "SYNO.PhotoStation.Photo"),
                     new KeyValuePair<string, string>("filter_smart", smartAlbumId),
                     new KeyValuePair<string, string>("limit", limit.ToString()),
@@ -110,10 +111,10 @@ namespace PhotoStationFrame.Api
             var response = await httpClient.PostAsync($"photo/webapi/photo.php?SynoToken={sessionId}", requestContent).ConfigureAwait(false);
             var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var listItemsResponse = JsonConvert.DeserializeObject<ListItemResponse>(responseString);
-            return listItemsResponse.data.items;
+            return listItemsResponse;
         }
 
-        public async Task<PhotoItem[]> ListPhotosAsync(string parentId, int offset = 0, int limit = 100)
+        public async Task<ListItemResponse> ListPhotosAsync(string parentId, int offset = 0, int limit = 100)
         {
             if (this.sessionId == null)
             {
@@ -139,14 +140,7 @@ namespace PhotoStationFrame.Api
 
             if (parentId != null)
             {
-                //if (!parentId.StartsWith("smart"))
-                //{
                 content.Add(new KeyValuePair<string, string>("id", parentId));
-                //}
-                //else
-                //{
-                //    content.Add(new KeyValuePair<string, string>("filter_smart", parentId));
-                //}
             }
 
             var requestContent = new FormUrlEncodedContent(content);
@@ -155,7 +149,7 @@ namespace PhotoStationFrame.Api
             var response = await httpClient.PostAsync($"photo/webapi/album.php?SynoToken={sessionId}", requestContent).ConfigureAwait(false);
             var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var listItemsResponse = JsonConvert.DeserializeObject<ListItemResponse>(responseString);
-            return listItemsResponse.data.items;
+            return listItemsResponse;
         }
 
         public string GetThumbnailUrl(PhotoItem item)

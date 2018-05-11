@@ -15,7 +15,12 @@
             <converters:ImageModelToStretchConverter x:Key="StretchConverter" />
         </ResourceDictionary>
     </Page.Resources>
-    <Grid x:Name="MyGrid" >
+    <Grid x:Name="MyGrid">
+        <Grid.ContextFlyout>
+            <MenuFlyout>
+                <MenuFlyoutItem Text="Settings" Command="{Binding GoToSettingsCommand}" Icon="Setting"/>
+            </MenuFlyout>
+        </Grid.ContextFlyout>
         <FlipView x:Name="MyFlipView" Background="#00000000" ItemsSource="{Binding Images}" Loaded="FlipView_Loaded" Unloaded="MyFlipView_Unloaded">
             <FlipView.ItemTemplate>
                 <DataTemplate>
