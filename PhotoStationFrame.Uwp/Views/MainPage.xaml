@@ -13,6 +13,7 @@
         <ResourceDictionary>
             <converters:ImageModelToBitmapImageConverter x:Key="ImageConverter" />
             <converters:ImageModelToStretchConverter x:Key="StretchConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         </ResourceDictionary>
     </Page.Resources>
     <Grid x:Name="MyGrid">
@@ -21,6 +22,10 @@
                 <MenuFlyoutItem Text="Settings" Command="{Binding GoToSettingsCommand}" Icon="Setting"/>
             </MenuFlyout>
         </Grid.ContextFlyout>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ProgressRing IsActive="{Binding IsLoading}"/>
+            <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Margin="80,0"/>
+        </StackPanel>
         <FlipView x:Name="MyFlipView" Background="#00000000" ItemsSource="{Binding Images}" Loaded="FlipView_Loaded" Unloaded="MyFlipView_Unloaded">
             <FlipView.ItemTemplate>
                 <DataTemplate>
@@ -29,5 +34,6 @@
                 </DataTemplate>
             </FlipView.ItemTemplate>
         </FlipView>
+        <TextBlock Text="No configuration found. Please enter your credentials and the address of your Synology DiskStation at settings page.&#x0a;Open settings with right click or CTRL + S key or by clicking here." Tapped="TextBlock_Tapped" Visibility="{Binding ShowNoSettingsNotification, Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="80,0"/>
     </Grid>
 </Page>

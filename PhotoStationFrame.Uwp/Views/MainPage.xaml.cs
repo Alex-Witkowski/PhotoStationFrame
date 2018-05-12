@@ -145,5 +145,10 @@ namespace PhotoStationFrame.Uwp
             flipTimer.Stop();
             reloadTimer.Stop();
         }
+
+        private void TextBlock_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            (DataContext as MainViewModel)?.GoToSettingsCommand?.Execute(null);
+        }
     }
 }
