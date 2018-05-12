@@ -44,6 +44,7 @@ For remote deployment to Windows IoT core like Raspberry Pi you need:
 - everything from above
 - [Setup your device with Windows 10 Iot core](https://docs.microsoft.com/en-us/windows/iot-core/tutorials/quickstarter/devicesetup)
 - [Configure remote debug](https://docs.microsoft.com/en-us/windows/iot-core/develop-your-app/appdeployment#deploy-a-c-app-to-your-windows-10-iot-core-device)
+- You may want to add some hardcoded settings - see MainViewModel for LoadData Method for more information
 - Hit F5 and wait some seconds
 
 ## Roadmap
