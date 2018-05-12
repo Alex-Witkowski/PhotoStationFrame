@@ -38,6 +38,7 @@ The PhotStation Frame is a digital picture frame software as UWP app with suppor
 - Presence Sensor for power control 
 - Support for other Cloud providers
 - Some cool stuff with [VisionService](https://azure.microsoft.com/en-us/services/cognitive-services/directory/vision/)
+- Some cool WinML stuff 
 - Cross Plattform App
 
 
