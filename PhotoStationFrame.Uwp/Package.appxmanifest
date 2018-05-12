@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="3b9a4985-9f41-4ce2-b882-89667c107791" Publisher="CN=siral" Version="1.0.0.0" />
+  <Identity Name="3b9a4985-9f41-4ce2-b882-89667c107791" Publisher="CN=siral" Version="0.1.0.0" />
   <mp:PhoneIdentity PhoneProductId="3b9a4985-9f41-4ce2-b882-89667c107791" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>PhotoStationFrame.Uwp</DisplayName>
-    <PublisherDisplayName>siral</PublisherDisplayName>
+    <PublisherDisplayName>Alexander Witkowski</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="PhotoStationFrame.Uwp.App">
-      <uap:VisualElements DisplayName="PhotoStationFrame.Uwp" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="PhotoStationFrame.Uwp" BackgroundColor="transparent">
+      <uap:VisualElements DisplayName="PhotoStationFrame" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="PhotoStationFrame the digital picture frame app that connects to your Synology DiskStation" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
