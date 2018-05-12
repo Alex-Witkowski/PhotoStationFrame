@@ -11,7 +11,8 @@ I started with the app because all my images are stored on my Synology and most 
 So I wrote these UWP App first showing pictures of one special album what was not verry handy. But the usage of a smart album is realy cool because you can adjust the images shown with the album filter. I tried a filter depending on a given Tag but using a five star filter was more easy. You could also try a time filter. 
 
 **There is one point with using a smart album. Please make sure to select only pictures**
-![Smart album settings with picture option.](./docs/Assets/SmartAlbumOnlyPictures-de.PNG)
+
+<img src="./docs/Assets/SmartAlbumOnlyPictures-de.PNG" width="600">
 
 ### Preconditions 
 - Synology DiskStation with Phote Station 6
