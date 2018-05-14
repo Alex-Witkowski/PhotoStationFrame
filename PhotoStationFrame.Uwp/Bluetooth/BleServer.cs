@@ -4,7 +4,7 @@ using Windows.Devices.Bluetooth;
 
 namespace PhotoStationFrame.Uwp.Bluetooth
 {
-    public class BleServer
+    public class BleServer : IBleServer 
     {
         public async Task<bool> CheckPeripheralRoleSupportAsync()
         {

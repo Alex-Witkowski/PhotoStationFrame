@@ -83,6 +83,7 @@ namespace PhotoStationFrame.Uwp
             Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
 
             var vm = this.DataContext as MainViewModel;
+            await vm?.Initialize();
             await vm?.LoadData();
         }
 

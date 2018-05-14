@@ -95,6 +95,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Bluetooth\BleExtensions.cs" />
+    <Compile Include="Bluetooth\BleServer.cs" />
+    <Compile Include="Bluetooth\IBleServer.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\ImageModelToBitmapImageConverter.cs" />
     <Compile Include="Converters\ImageModelToStretchConverter.cs" />

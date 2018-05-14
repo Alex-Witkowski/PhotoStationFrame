@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using PhotoStationFrame.Api;
 using PhotoStationFrame.Api.Models;
+using PhotoStationFrame.Uwp.Bluetooth;
 using PhotoStationFrame.Uwp.Extensions;
 using PhotoStationFrame.Uwp.Settings;
 using PhotoStationFrame.Uwp.ViewObjects;
@@ -20,6 +21,7 @@ namespace PhotoStationFrame.Uwp.ViewModels
         private PhotoStationClient photoClient;
         private readonly INavigationService navigationService;
         private readonly ISettingsHelper settingsHelper;
+        private readonly IBleServer bleServer;
         private ObservableCollection<ImageModel> _thumbnailUrls;
         private bool _showNoSettingsNotification;
         private bool _isLoading;
@@ -28,17 +30,23 @@ namespace PhotoStationFrame.Uwp.ViewModels
 
         private const bool randomOrder = true;
 
-        public MainViewModel(PhotoStationClient photoStationClient, INavigationService navigationService, ISettingsHelper settingsHelper)
+        public MainViewModel(PhotoStationClient photoStationClient, INavigationService navigationService, ISettingsHelper settingsHelper, IBleServer bleServer)
         {
             this.photoClient = photoStationClient;
             this.navigationService = navigationService;
             this.settingsHelper = settingsHelper;
+            this.bleServer = bleServer;
             GoToSettingsCommand = new RelayCommand(HandleGoToSettingsCommand);
         }
 
         private void HandleGoToSettingsCommand()
         {
             navigationService?.NavigateTo(ViewModelLocator.SettingsPageKey);
+        }
+
+        public async Task Initialize()
+        {
+            var peripheralRoleSupported = await bleServer.CheckPeripheralRoleSupportAsync();
         }
 
         public async Task LoadData()
