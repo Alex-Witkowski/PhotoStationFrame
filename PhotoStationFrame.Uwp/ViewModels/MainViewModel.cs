@@ -47,6 +47,10 @@ namespace PhotoStationFrame.Uwp.ViewModels
         public async Task Initialize()
         {
             var peripheralRoleSupported = await bleServer.CheckPeripheralRoleSupportAsync();
+            if(peripheralRoleSupported)
+            {
+                await bleServer.ServiceProviderInitAsync();
+            }
         }
 
         public async Task LoadData()
