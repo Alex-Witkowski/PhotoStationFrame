@@ -66,7 +66,19 @@ namespace PhotoStationFrame.Uwp.Bluetooth
 
             addressCharacteristic.WriteRequested += AddressCharacteristic_WriteRequestedAsync; ;
 
+            // BT_Code: Indicate if your sever advertises as connectable and discoverable.
+            GattServiceProviderAdvertisingParameters advParameters = new GattServiceProviderAdvertisingParameters
+            {
+                // IsConnectable determines whether a call to publish will attempt to start advertising and 
+                // put the service UUID in the ADV packet (best effort)
+                IsConnectable = true,
 
+                // IsDiscoverable determines whether a remote device can query the local device for support 
+                // of this service
+                IsDiscoverable = true
+            };
+
+            serviceProvider.StartAdvertising(advParameters);
             return true;
         }
 
