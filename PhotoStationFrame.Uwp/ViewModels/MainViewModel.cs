@@ -49,7 +49,7 @@ namespace PhotoStationFrame.Uwp.ViewModels
             var peripheralRoleSupported = await bleServer.CheckPeripheralRoleSupportAsync();
             if(peripheralRoleSupported)
             {
-                await bleServer.ServiceProviderInitAsync();
+                var initResult = await bleServer.ServiceProviderInitAsync();
             }
         }
 
